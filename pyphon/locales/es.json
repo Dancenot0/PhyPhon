@@ -1,0 +1,21 @@
+{
+  "app": {
+    "title": "PyPhonOS Ultra",
+    "welcome": "Bienvenido a la nueva era",
+    "search": "Buscar funciones..."
+  },
+  "login": {
+    "title": "Crear Cuenta",
+    "subtitle": "Únete a la comunidad PyPhon",
+    "user": "Usuario",
+    "email": "Correo Electrónico",
+    "pass": "Contraseña",
+    "confirm": "Confirmar Contraseña",
+    "submit": "REGISTRARSE"
+  },
+  "nav": {
+    "home": "Inicio",
+    "explore": "Explorar",
+    "profile": "Perfil"
+  }
+}

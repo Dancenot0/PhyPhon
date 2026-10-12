@@ -1,0 +1,9 @@
+{
+  "dark_mode": false,
+  "accent": "purple",
+  "overrides": {
+    "background": [254, 247, 255],
+    "primary": [103, 80, 164],
+    "surface": [255, 255, 255]
+  }
+}
