@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seguridad, sistema y accesibilidad · PyPhonOS</title>
+<meta name="description" content="Autenticación biométrica, teclados seguros, modos de accesibilidad y canvas de herramientas de proyecto en PyPhonOS.">
+<link rel="stylesheet" href="../assets/css/docs.css"><meta name="theme-color" content="#17171a">
+</head>
+<body>
+<a class="skip" href="#con">Saltar al contenido</a>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="../index.html">PyPhonOS<span class="sub">docs</span></a>
+  <nav class="nav-doc" aria-label="Primario"><a href="../index.html"><span data-es>Inicio</span><span data-en>Overview</span></a><a href="../start.html"><span data-es>Guía</span><span data-en>Guide</span></a></nav>
+  <div class="lang" role="group"><button type="button" data-lang="es" data-on>ES</button><button type="button" data-lang="en">EN</button></div>
+</div></header>
+<div class="doc">
+  <aside class="sidenav">
+    <h3><span data-es>Empieza aquí</span><span data-en>Get started</span></h3>
+    <nav><a href="../index.html"><span data-es>Visión general</span><span data-en>Overview</span></a><a href="../start.html"><span data-es>Primeros pasos</span><span data-en>Getting started</span></a></nav>
+    <h3><span data-es>Plataforma</span><span data-en>Platform</span></h3>
+    <nav><a href="../core/engine.html"><span data-es>Motor y eventos</span><span data-en>Engine &amp; events</span></a><a href="../core/animation-render.html"><span data-es>Animación y renderer</span><span data-en>Animation &amp; renderer</span></a><a href="../core/theme-i18n.html"><span data-es>Tema, color e i18n</span><span data-en>Theme, colour &amp; i18n</span></a></nav>
+    <h3><span data-es>Widgets</span><span data-en>Widgets</span></h3>
+    <nav><a href="layout.html"><span data-es>Layout y vistas</span><span data-en>Layout &amp; views</span></a><a href="controls.html"><span data-es>Controles y formularios</span><span data-en>Controls &amp; forms</span></a><a href="feedback.html"><span data-es>Feedback y diálogos</span><span data-en>Feedback &amp; dialogs</span></a><a href="data-media.html"><span data-es>Archivos, datos y media</span><span data-en>Files, data &amp; media</span></a><a class="active" href="security-system.html"><span data-es>Seguridad y sistema</span><span data-en>Security &amp; system</span></a></nav>
+  </aside>
+  <main class="content" id="con">
+    <span class="breadcrumb"><a href="../index.html">Docs</a> / Widgets / Seguridad y sistema</span>
+    <h1><span data-es>Seguridad, plataforma y utilidades</span><span data-en>Security, platform and utilities</span></h1>
+    <p><span data-es>Este bloque agrupa los dos extremos de una app móvil: proteger lo sensible y modelar interacciones del dispositivo, además de accesibilidad y utilidades.</span><span data-en>This block groups the two ends of a mobile app: protecting sensitive flows and modelling device interactions, plus accessibility and utilities.</span></p>
+
+    <h2 id="sec">Autenticación y seguridad</h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Para qué sirve</span><span data-en>Purpose</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>BiometricPrompt</code> / <code>FingerprintDialog</code></td><td><span data-es>Flujo de desbloqueo por biometría con diálogo.</span><span data-en>Biometric unlock flow behind a dialog.</span></td></tr>
+        <tr><td><code>SecureKeyboard</code></td><td><span data-es>Teclado virtual pensado para campos sensibles.</span><span data-en>Virtual keypad for sensitive fields.</span></td></tr>
+        <tr><td><code>PasswordStrengthMeter</code></td><td><span data-es>Estimador visual de robustez de contraseña.</span><span data-en>Visual password-strength gauge.</span></td></tr>
+      </tbody></table>
+    <pre><span class="k">from</span> pyphon.widgets.security import BiometricPrompt, SecureKeyboard, PasswordStrengthMeter
+
+Bio = BiometricPrompt()            <span class="c"># dispara el prompt de la plataforma</span>
+Bio.on_success.connect(acceder)
+Bio.on_error.connect(mostrar_error)
+
+fuerte = PasswordStrengthMeter()   <span class="c"># actualiza al escribir el PIN</span>
+teclado = SecureKeyboard()          <span class="c"># para la caja del PIN</span></pre>
+
+    <h2 id="acc">Accesibilidad</h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Para qué sirve</span><span data-en>Purpose</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>TalkBack</code></td><td><span data-es>Narración leída de foco y descripciones.</span><span data-en>Focus and description reading.</span></td></tr>
+        <tr><td><code>HighContrastMode</code></td><td><span data-es>Remapea tokens a variantes de alto contraste.</span><span data-en>Remaps tokens to high-contrast variants.</span></td></tr>
+        <tr><td><code>LargeTextMode</code></td><td><span data-es>Escala tipográfica base de la app.</span><span data-en>Scales the app base font size.</span></td></tr>
+        <tr><td><code>ScreenReader</code></td><td><span data-es>Coordinador del flujo de lectura.</span><span data-en>Orchestrates the reading flow.</span></td></tr>
+      </tbody></table>
+
+    <h2 id="sys">Hardware e interacción</h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Intención</span><span data-en>Intended for</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>Keyboard</code> / <code>MouseCursor</code> / <code>Touchpad</code></td><td><span data-es>Superficies virtuales de entrada.</span><span data-en>Virtual input surfaces.</span></td></tr>
+        <tr><td><code>GestureDetector</code> / <code>VibrationFeedback</code></td><td><span data-es>Traduce gestos y avisa de acciones.</span><span data-en>Interprets gestures and flags actions.</span></td></tr>
+        <tr><td><code>QuickSettingsTile</code> / <code>AppShortcut</code> / <code>PictureInPicture</code> / <code>SplitScreen</code> / <code>EdgePanel</code></td><td><span data-es>Contratos de sistema para lanzadores y multitarea.</span><span data-en>System contracts for launchers and multitasking.</span></td></tr>
+      </tbody></table>
+
+    <h2 id="utils"><span data-es>Interacciones y utilidades</span><span data-en>Gestures and utilities</span></h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Para qué sirve</span><span data-en>Purpose</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>DragAndDrop</code></td><td><span data-es>Reordenar elementos arrastrando.</span><span data-en>Rearrange items by dragging.</span></td></tr>
+        <tr><td><code>SwipeToAction</code> / <code>PullToRefresh</code></td><td><span data-es>Desliza para archivar / jalá arriba para recargar.</span><span data-en>Swipe to archive / pull down to refresh.</span></td></tr>
+        <tr><td><code>InfiniteScroll</code></td><td><span data-es>Carga por lotes bajo demanda.</span><span data-en>Load-on-demand batches.</span></td></tr>
+        <tr><td><code>ParallaxView</code> / <code>ZoomableView</code> / <code>RotateView</code></td><td><span data-es>Transformaciones visuales de contenido.</span><span data-en>Visual content transforms.</span></td></tr>
+      </tbody></table>
+    <p data-es>Estas no crean un widget por sí solas: decoran a un hijo o responden a gestos del <code>EventHandler</code> raíz, por eso se conectan sobre el contenedor real.</p>
+    <p data-en>These don't render standalone: they decorate a hosted child or react to events on the root handler, so attach them to a real container when wiring.</p>
+
+    <h2 id="mg"><span data-es>Gestores convenientes</span><span data-en>Convenience managers</span></h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Función</span><span data-en>Purpose</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>ThemeManager / FontManager</code></td><td><span data-es>Acceso único a tema y fuentes de la app.</span><span data-en>Single access to app theme and fonts.</span></td></tr>
+        <tr><td><code>LocalizationManager / AnimationManager</code></td><td><span data-es>Wrappers de i18n y animación.</span><span data-en>i18n and animation wrappers.</span></td></tr>
+        <tr><td><code>LayoutManager</code></td><td><span data-es>Recalcula contenedores de forma central.</span><span data-en>Centrally recomputes layout.</span></td></tr>
+        <tr><td><code>BackHandler</code></td><td><span data-es>Supervisa el retroceso global.</span><span data-en>Owns the global back gesture.</span></td></tr>
+      </tbody></table>
+
+    <h2 id="advanced"><span data-es>Superficies experimentales (advanced)</span><span data-en>Experimental surfaces</span></h2>
+    <p><span data-es><code>advanced.py</code> reúne <code>ARView</code>, <code>VRView</code>, <code>Object3DView</code>, <code>NeumorphicWidget</code>, <code>GlassmorphismPanel</code> y <code>DynamicIsland</code>. Son contratos de alto nivel cuya representación depende del backend de la escena (WGPU/OpenGL/WebGL), no del lienzo 2D por defecto.</span><span data-en><code>advanced.py</code> collects <code>ARView</code>, <code>VRView</code>, <code>Object3DView</code>, <code>NeumorphicWidget</code>, <code>GlassmorphismPanel</code> and <code>DynamicIsland</code>. These are high-level contracts whose rendering depends on a scene backend (WGPU/OpenGL/WebGL), not the default 2D canvas.</span></p>
+    <div class="tip"><span data-es>Recomendado: empieza por <a href="controls.html">Controles y formularios</a> y <a href="feedback.html">Feedback</a>, que funcionan sobre el renderer por defecto.</span><span data-en>Recommended: begin with <a href="controls.html">Controls and forms</a> and <a href="feedback.html">Feedback</a>, which run on the default renderer.</span></div>
+  </main>
+</div>
+<footer><div class="wrap"><span data-es>PyPhonOS · Seguridad y sistema.</span><span data-en>PyPhonOS · security and system.</span><span>v0.1.0</span></div></footer>
+<script src="../assets/js/app.js"></script>
+</body>
+</html>

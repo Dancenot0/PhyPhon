@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feedback y diálogos · PyPhonOS</title>
+<meta name="description" content="Diálogos, toasts, snackbars, esqueletos de carga y estados visuales de retroalimentación en PyPhonOS.">
+<link rel="stylesheet" href="../assets/css/docs.css"><meta name="theme-color" content="#17171a">
+</head>
+<body>
+<a class="skip" href="#con">Saltar al contenido</a>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="../index.html">PyPhonOS<span class="sub">docs</span></a>
+  <nav class="nav-doc" aria-label="Primario">
+    <a href="../index.html"><span data-es>Visita general</span><span data-en>Overview</span></a>
+    <a href="../start.html"><span data-es>Guía</span><span data-en>Guide</span></a>
+  </nav>
+  <div class="lang" role="group"><button type="button" data-lang="es" data-on>ES</button><button type="button" data-lang="en">EN</button></div>
+</div></header>
+<div class="doc">
+  <aside class="sidenav">
+    <h3><span data-es>Empieza aquí</span><span data-en>Get started</span></h3>
+    <nav><a href="../index.html"><span data-es>Visión general</span><span data-en>Overview</span></a><a href="../start.html"><span data-es>Primeros pasos</span><span data-en>Getting started</span></a></nav>
+    <h3><span data-es>Plataforma</span><span data-en>Platform</span></h3>
+    <nav><a href="../core/engine.html"><span data-es>Motor y eventos</span><span data-en>Engine &amp; events</span></a><a href="../core/animation-render.html"><span data-es>Animación y renderer</span><span data-en>Animation &amp; renderer</span></a><a href="../core/theme-i18n.html"><span data-es>Tema, color e i18n</span><span data-en>Theme, colour &amp; i18n</span></a></nav>
+    <h3><span data-es>Widgets</span><span data-en>Widgets</span></h3>
+    <nav><a href="layout.html"><span data-es>Layout y vistas</span><span data-en>Layout &amp; views</span></a><a href="controls.html"><span data-es>Controles y formularios</span><span data-en>Controls &amp; forms</span></a><a class="active" href="feedback.html"><span data-es>Feedback y diálogos</span><span data-en>Feedback &amp; dialogs</span></a><a href="data-media.html"><span data-es>Archivos, datos y media</span><span data-en>Files, data &amp; media</span></a><a href="security-system.html"><span data-es>Seguridad y sistema</span><span data-en>Security &amp; system</span></a></nav>
+  </aside>
+  <main class="content" id="con">
+    <span class="breadcrumb"><a href="../index.html">Docs</a> / Widgets / Feedback</span>
+    <h1><span data-es>Diálogos y estados de retroalimentación</span><span data-en>Dialogs and feedback states</span></h1>
+    <p><span data-es>Elementos de confirmación orientados a una acción y estados de carga/éxito. Trabajan sobre el lienzo como overlays.</span><span data-en>Confirmation and status elements: they paint as overlays on the canvas.</span></p>
+
+    <h2 id="dialog">Diálogos modales</h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Para qué sirve</span><span data-en>Purpose</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>Dialog(title, content)</code></td><td><span data-es>Contenedor base; cierra con on_dismiss.</span><span data-en>Base container; closes via on_dismiss.</span></td></tr>
+        <tr><td><code>AlertDialog(title, message, positive_text)</code></td><td><span data-es>Aviso con acciones positivas/negativas.</span><span data-en>Notice with confirm/cancel.</span></td></tr>
+        <tr><td><code>BottomSheetDialog</code></td><td><span data-es>Hoja que sube desde abajo.</span><span data-en>Sheet that rises from the bottom.</span></td></tr>
+        <tr><td><code>DatePickerDialog / TimePickerDialog</code></td><td><span data-es>Selección de fecha/hora con callback.</span><span data-en>Date/time with a selection callback.</span></td></tr>
+        <tr><td><code>PopupWindow / Tooltip</code></td><td><span data-es>Superficie pequeña o ayuda contextual.</span><span data-en>Small overlay or contextual hint.</span></td></tr>
+      </tbody></table>
+    <pre><span class="k">from</span> pyphon.widgets import AlertDialog, Toast, Snackbar, BottomSheetDialog, DatePickerDialog, Tooltip
+
+AlertDialog(title=<span class="s">"¿Borrar?"</span>,
+            message=<span class="s">"Esta acción no se puede deshacer."</span>,
+            positive_text=<span class="s">"Borrar"</span>,
+            on_positive=borrar).show()
+
+Snackbar(message=<span class="s">"Cambios guardados"</span>,
+         action_text=<span class="s">"DESHACER"</span>)
+Toast(message=<span class="s">"Copiado"</span>, duration=2.0)
+
+DatePickerDialog(on_date_selected=escribir).show()
+tip = Tooltip(text=<span class="s">"Mantén para ver más"</span>)</pre>
+    <div class="note"><span data-es>Para <i>pick selectores de hora/fecha</i> no modales, la familia <code>DatePicker</code>, <code>TimePicker</code>, <code>DateTimePicker</code> en <code>widgets/pickers.py</code> cubre el resto.</span><span data-en>The non-modal <code>DatePicker</code>/<code>TimePicker</code>/<code>DateTimePicker</code> family in <code>widgets/pickers.py</code> covers the rest.</span></div>
+
+    <h2 id="fe">Estados visuales</h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Para qué sirve</span><span data-en>Purpose</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>Badge(text)</code></td><td><span data-es>Contador o marcador pequeño.</span><span data-en>Tiny counter/badge.</span></td></tr>
+      <tr><td><code>Chip(text, icon)</code></td><td><span data-es>Filtro/píldora accionable.</span><span data-en>Actionable filter pill.</span></td></tr>
+      <tr><td><code>Divider / Space</code></td><td><span data-es>Separación y espaciado.</span><span data-en>Vertical rules and spacing.</span></td></tr>
+      <tr><td><code>SkeletonScreen(pattern)</code> / <code>ShimmerLayout</code></td><td><span data-es>Esqueleto de carga con brillos.</span><span data-en>Loading skeleton with shimmer.</span></td></tr>
+      <tr><td><code>LoadingButton</code></td><td><span data-es>Botón que muestra actividad.</span><span data-en>Button that shows progress.</span></td></tr>
+      <tr><td><code>StateLayout</code> / <code>Placeholder</code> / <code>ShimmerLayout</code></td><td><span data-es>Contenido vacío, por estados y entradas de carga.</span><span data-en>Empty/stateful/placeholder containers.</span></td></tr>
+      <tr><td><code>LottieAnimationView</code></td><td><span data-es>Contador de frames para animaciones lightweight.</span><span data-en>Lightweight frame animation wrapper.</span></td></tr>
+    </tbody></table>
+    <pre>SkeletonScreen(pattern=<span class="s">"default"</span>, width=360, height=800).start()
+LoadingButton(text=<span class="s">"Enviando…"</span>).show_spinner()</pre>
+
+    <h2 id="icons">Iconografía</h2>
+    <p><span data-es><code>Icon(icon_name, size, color)</code> busca en <code>IconDB</code> un glifo (230+ iconos). <code>IconButton</code>/<code>FAB</code> lo encierran en áreas pulsables. Copia de comandos: <code>IconDB.search("home")</code>.</span><span data-en><code>Icon(icon_name,size,color)</code> looks up a 230+-glyph catalog in <code>IconDB</code>. <code>IconButton</code> and <code>FAB</code> wrap it in tappable surfaces. Discover via <code>IconDB.search("home")</code>.</span></p>
+    <pre><span class="k">from</span> pyphon.widgets import Icon, FAB, IconButton
+Icon(icon_name=<span class="s">"search"</span>, size=24, color=Palette.ON_SURFACE)
+IconButton(icon=<span class="s">"plus"</span>, on_click=nuevo)
+FAB(icon=<span class="s">"add"</span>, on_click=nuevo)</pre>
+  </main>
+</div>
+<footer><div class="wrap"><span data-es>PyPhonOS · Feedback y diálogos.</span><span data-en>PyPhonOS · feedback &amp; dialogs.</span><span>v0.1.0</span></div></footer>
+<script src="../assets/js/app.js"></script>
+</body>
+</html>

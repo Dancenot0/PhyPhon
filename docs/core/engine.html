@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motor y eventos · PyPhonOS</title>
+<meta name="description" content="MobileApp, ciclo de vida de Screen, pila del Navigator, señales (Signal) y manejador de eventos en PyPhonOS.">
+<link rel="stylesheet" href="../assets/css/docs.css">
+<meta name="theme-color" content="#17171a">
+<meta property="og:title" content="PyPhonOS — Motor y eventos">
+</head>
+<body>
+<a class="skip" href="#con">Saltar al contenido</a>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="../index.html">PyPhonOS<span class="sub">docs</span></a>
+  <nav class="nav-doc" aria-label="Primario">
+    <a href="../index.html"><span data-es>Visita general</span><span data-en>Overview</span></a>
+    <a href="../start.html"><span data-es>Guía</span><span data-en>Guide</span></a>
+  </nav>
+  <div class="lang" role="group"><button type="button" data-lang="es" data-on>ES</button><button type="button" data-lang="en">EN</button></div>
+</div></header>
+
+<div class="doc">
+  <aside class="sidenav">
+    <h3><span data-es>Empieza aquí</span><span data-en>Get started</span></h3>
+    <nav>
+      <a href="../index.html"><span data-es>Visión general</span><span data-en>Overview</span></a>
+      <a href="../start.html"><span data-es>Primeros pasos</span><span data-en>Getting started</span></a>
+    </nav>
+    <h3><span data-es>Plataforma</span><span data-en>Platform</span></h3>
+    <nav>
+      <a class="active" href="engine.html"><span data-es>Motor y eventos</span><span data-en>Engine &amp; events</span></a>
+      <a href="animation-render.html"><span data-es>Animación y renderer</span><span data-en>Animation &amp; renderer</span></a>
+      <a href="theme-i18n.html"><span data-es>Tema, color e i18n</span><span data-en>Theme, colour &amp; i18n</span></a>
+    </nav>
+    <h3><span data-es>Widgets</span><span data-en>Widgets</span></h3>
+    <nav>
+      <a href="../widgets/layout.html"><span data-es>Layout y vistas</span><span data-en>Layout &amp; views</span></a>
+      <a href="../widgets/controls.html"><span data-es>Controles y formularios</span><span data-en>Controls &amp; forms</span></a>
+      <a href="../widgets/feedback.html"><span data-es>Feedback y diálogos</span><span data-en>Feedback &amp; dialogs</span></a>
+      <a href="../widgets/data-media.html"><span data-es>Archivos, datos y media</span><span data-en>Files, data &amp; media</span></a>
+      <a href="../widgets/security-system.html"><span data-es>Seguridad y sistema</span><span data-en>Security &amp; system</span></a>
+    </nav>
+  </aside>
+
+  <main class="content" id="con">
+    <span class="breadcrumb"><a href="../index.html">Docs</a> / Motor y eventos</span>
+    <h1><span data-es>Motor de la aplicación</span><span data-en>Application engine</span></h1>
+    <p class="lead"><span data-es>El módulo <code>pyphon.core</code> coordina la ventana, el bucle de dibujo y el sistema de navegación.</span><span data-en>The <code>pyphon.core</code> module coordinates the window, the drawing loop and the navigation system.</span></p>
+
+    <h2 id="mobileapp">MobileApp</h2>
+    <p><span data-es>Clase central. Crea la ventana nativa (SDL2), un <code>Canvas</code>, el gestor de temas, animación, navegación e i18n, y mantiene el ciclo <code>procesar/renderse</code>.</span><span data-en>The central class. It creates the native window (SDL2), a <code>Canvas</code>, plus theme, animation, navigation and i18n managers, and runs the process/render loop.</span></p>
+    <table class="api"><thead><tr><th><span data-es>Se usa para</span><span data-en>Purpose</span></th><th>Método</th></tr></thead>
+      <tbody>
+        <tr><td><span data-es>Crear ventana + motor</span><span data-en>Create window + engine</span></td><td><code>MobileApp(titulo, ancho, alto)</code></td></tr>
+        <tr><td><span data-es>Mostrar una pantalla</span><span data-en>Show a screen</span></td><td><code>push_screen(screen)</code></td></tr>
+        <tr><td><span data-es>Volver atrás</span><span data-en>Go back</span></td><td><code>pop_screen()</code></td></tr>
+        <tr><td><span data-es>Bucle principal</span><span data-en>Main loop</span></td><td><code>run()</code></td></tr>
+        <tr><td><span data-es>Recursos del paquete</span><span data-en>Load bundle data</span></td><td><code>load_bundled_resources()</code></td></tr>
+      </tbody>
+    </table>
+    <pre><span class="k">app</span> = MobileApp(titulo=<span class="s">"Tienda"</span>, ancho=360, alto=800)
+app.load_bundled_resources()
+app.push_screen(CatalogoScreen())
+app.run()</pre>
+
+    <h2 id="screen">Screen y su ciclo de vida</h2>
+    <p><span data-es>Una <code>Screen</code> representa una vista a pantalla completa con widgets y enlaces de color. Define <code>build()</code> para montar contenido; los demás son enlaces opcionales, parecidos a los ciclos de actividades móviles.</span><span data-en>A <code>Screen</code> is a full-screen view holding widgets. Override <code>build()</code> to assemble it; the rest are optional lifecycle hooks similar to mobile activity callbacks.</span></p>
+    <table class="api"><thead><tr><th>Método</th><th><span data-es>Cuándo se llama</span><span data-en>Called when</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>build()</code></td><td><span data-es>Se monta el contenido (una vez).</span><span data-en>Content is assembled (once).</span></td></tr>
+        <tr><td><code>on_enter()</code></td><td><span data-es>Pantalla recién apilada.</span><span data-en>Screen was just pushed.</span></td></tr>
+        <tr><td><code>on_leave()</code></td><td><span data-es>Va a quedar tapada o a salir de pila.</span><span data-en>It is about to be covered or popped.</span></td></tr>
+        <tr><td><code>on_resume()</code></td><td><span data-es>Volvió a estar visible al desapilar.</span><span data-en>Became visible again after a pop.</span></td></tr>
+      </tbody></table>
+    <pre><span class="k">class</span> <span class="si">Perfil</span>(Screen):
+    <span class="k">def</span> build(<span class="k">self</span>):
+        self.estado = Label(text=<span class="s">"Perfil"</span>)
+        self.add(self.estado)
+    <span class="k">def</span> on_enter(<span class="k">self</span>):
+        self.estado.text = <span class="s">"Cargando..."</span>   <span class="c"># refresco al llegar</span>
+    <span class="k">def</span> on_leave(<span class="k">self</span>): pass
+    <span class="k">def</span> on_resume(<span class="k">self</span>): pass</pre>
+
+    <h2 id="navigator">Navigator: pila de pantallas</h2>
+    <p><span data-es><code>Navigator</code> gestiona una pila, dibuja la pantalla superior y traduce gestos (tocar, Esc, retroceso) en funciones de navegación. El uso normal es a través de <code>MobileApp</code>, pero puedes instanciarlo para prototipar sin ventana.</span><span data-en><code>Navigator</code> manages a stack, draws the top screen and maps gestures (tap, Escape, back) to navigation. Normally you reach it through <code>MobileApp</code>, but it can be built alone for headless prototyping.</span></p>
+    <table class="api"><thead><tr><th>Método</th><th><span data-es>Efecto</span><span data-en>Effect</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>push(screen)</code></td><td><span data-es>Añade con transición animada.</span><span data-en>Push with an animated transition.</span></td></tr>
+        <tr><td><code>pop()</code></td><td><span data-es>Quita la superior.</span><span data-en>Pop the top screen.</span></td></tr>
+        <tr><td><code>replace(screen)</code></td><td><span data-es>Sustituye la actual.</span><span data-en>Swap the current screen.</span></td></tr>
+        <tr><td><code>pop_to_root()</code></td><td><span data-es>Vacía hasta la raíz.</span><span data-en>Pop down to the root.</span></td></tr>
+        <tr><td><code>current_screen</code></td><td><span data-es>Pantalla visible.</span><span data-en>Visible screen.</span></td></tr>
+        <tr><td><code>can_go_back</code></td><td><span data-es>Permite retroceder.</span><span data-en>Whether going back is possible.</span></td></tr>
+      </tbody></table>
+
+    <h2 id="sig">Señales y eventos propios</h2>
+    <p><span data-es>Cada <code>Widget</code> trae un <code>EventHandler</code> donde conectas callbacks (por ejemplo <code>events.on_click.connect(...)</code>). Para llamadas desacopladas existe <code>Signal</code> en <code>pyphon.events</code>.</span><span data-en>Every <code>Widget</code> exposes an <code>EventHandler</code> where you connect callbacks (for example <code>events.on_click.connect(...)</code>). For decoupled calls there is <code>Signal</code> in <code>pyphon.events</code>.</span></p>
+    <pre><span class="k">from</span> pyphon.events.signals import Signal
+
+<span class="k">class</span> <span class="si">Store</span>:
+    <span class="k">def</span> __init__(<span class="k">self</span>):
+        self.comprado = Signal()
+
+tienda = Store()
+tienda.comprado.connect(carrito.anadir)
+tienda.comprado.emit(producto=id_producto)  <span class="c"># invoca a los conectados</span></pre>
+
+    <h2 id="inspector">Inspector en ejecución</h2>
+    <p><span data-es>Pulsa <b>F12</b> mientras corre la app para activar <code>WidgetInspector</code>: dibuja bordes, identificadores y recorre los widgets bajo el cursor. Útil para depurar jerarquías.</span><span data-en>While running, press <b>F12</b> to enable <code>WidgetInspector</code>: it draws borders, identifies widgets and inspects what is under the cursor — handy for debugging hierarchies.</span></p>
+    <div class="tip"><span data-es><b>Recuerda:</b> cierra los recursos con la ventana; <code>run()</code> usa <code>finally</code> para limpiar la pantalla nativa.</span><span data-en><b>Remember:</b> resources are closed with the window; <code>run()</code> uses <code>finally</code> to clean up the native window.</span></div>
+  </main>
+</div>
+<footer><div class="wrap">
+  <span data-es>PyPhonOS · funciones del motor.</span><span data-en>PyPhonOS · engine features.</span>
+  <span>v0.1.0</span>
+</div></footer>
+<script src="../assets/js/app.js"></script>
+</body>
+</html>

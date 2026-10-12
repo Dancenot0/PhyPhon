@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyphonos"
+version = "0.1.0"
+description = "PyPhonOS - kit de interfaz (UI) movil tipo Material Design 3 para Python, construido sobre SDL2."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "PyPhon Contributors" }]
+keywords = ["ui","gui","sdl2","mobile","material","widgets","pyphon","pyphonos"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Software Development :: User Interfaces",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+# Nota: "sdl2" es el nombre de importacion de PySDL2. En el sistema se debe
+# disponer ademas de las librerias nativas SDL2, SDL2_ttf y SDL2_image.
+dependencies = ["pysdl2>=0.9.7"]
+
+[project.optional-dependencies]
+# Binarios nativos SDL2 listos para Windows (util si no tienes SDL2.dll).
+binary = ["pysdl2-dll"]
+
+[project.urls]
+Homepage = "https://github.com/ejemplo/pyphonos"
+"Bug Tracker" = "https://github.com/ejemplo/pyphonos/issues"
+
+[tool.setuptools]
+packages = [
+  "pyphon",
+  "pyphon.core",
+  "pyphon.renderer",
+  "pyphon.events",
+  "pyphon.widgets"
+]
+
+[tool.setuptools.package-data]
+pyphon = ["assets/fonts/*.ttf", "locales/*.json", "theme.json"]
+
+[tool.setuptools.exclude-package-data]
+pyphon = ["**/__pycache__/**", "*.pyc"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

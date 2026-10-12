@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Controles y formularios · PyPhonOS</title>
+<meta name="description" content="Controles de PyPhonOS: label, botón, campo de texto, interruptores, sliders, checkboxes y validación.">
+<link rel="stylesheet" href="../assets/css/docs.css">
+<meta name="theme-color" content="#17171a">
+</head>
+<body>
+<a class="skip" href="#con">Saltar al contenido</a>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="../index.html">PyPhonOS<span class="sub">docs</span></a>
+  <nav class="nav-doc" aria-label="Primario">
+    <a href="../index.html"><span data-es>Visita general</span><span data-en>Overview</span></a>
+    <a href="../start.html"><span data-es>Guía</span><span data-en>Guide</span></a>
+  </nav>
+  <div class="lang" role="group"><button type="button" data-lang="es" data-on>ES</button><button type="button" data-lang="en">EN</button></div>
+</div></header>
+
+<div class="doc">
+  <aside class="sidenav">
+    <h3><span data-es>Empieza aquí</span><span data-en>Get started</span></h3>
+    <nav>
+      <a href="../index.html"><span data-es>Visión general</span><span data-en>Overview</span></a>
+      <a href="../start.html"><span data-es>Primeros pasos</span><span data-en>Getting started</span></a>
+    </nav>
+    <h3><span data-es>Plataforma</span><span data-en>Platform</span></h3>
+    <nav>
+      <a href="../core/engine.html"><span data-es>Motor y eventos</span><span data-en>Engine &amp; events</span></a>
+      <a href="../core/animation-render.html"><span data-es>Animación y renderer</span><span data-en>Animation &amp; renderer</span></a>
+      <a href="../core/theme-i18n.html"><span data-es>Tema, color e i18n</span><span data-en>Theme, colour &amp; i18n</span></a>
+    </nav>
+    <h3><span data-es>Widgets</span><span data-en>Widgets</span></h3>
+    <nav>
+      <a href="layout.html"><span data-es>Layout y vistas</span><span data-en>Layout &amp; views</span></a>
+      <a class="active" href="controls.html"><span data-es>Controles y formularios</span><span data-en>Controls &amp; forms</span></a>
+      <a href="feedback.html"><span data-es>Feedback y diálogos</span><span data-en>Feedback &amp; dialogs</span></a>
+      <a href="data-media.html"><span data-es>Archivos, datos y media</span><span data-en>Files, data &amp; media</span></a>
+      <a href="security-system.html"><span data-es>Seguridad y sistema</span><span data-en>Security &amp; system</span></a>
+    </nav>
+  </aside>
+
+  <main class="content" id="con">
+    <span class="breadcrumb"><a href="../index.html">Docs</a> / Widgets / Controles</span>
+    <h1><span data-es>Controles y formularios</span><span data-en>Controls and forms</span></h1>
+    <p><span data-es>Widgets listos para reunir y mostrar datos del usuario. Todos heredan de <code>Widget</code>, por lo que soportan <code>animate()</code>, color, opacidad y eventos conectables.</span><span data-en>Ready-to-use widgets to collect and show user data. All inherit from <code>Widget</code> and therefore support <code>animate()</code>, colour, opacity and connectable events.</span></p>
+
+    <h2>Campos y textos</h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Para qué sirve</span><span data-en>Purpose</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>Label(text, size, color)</code></td><td><span data-es>Texto legible, cacheado por tamaño.</span><span data-en>Read-only text.</span></td></tr>
+        <tr><td><code>TextInput(placeholder, width)</code></td><td><span data-es>Campo de texto simple.</span><span data-en>Single-line text field.</span></td></tr>
+        <tr><td><code>SearchView(on_query)</code></td><td><span data-es>Barra de búsqueda.</span><span data-en>Search bar.</span></td></tr>
+        <tr><td><code>AutoCompleteTextView(suggestions)</code></td><td><span data-es>Campo con autocompletado.</span><span data-en>Field with suggestions.</span></td></tr>
+        <tr><td><code>PINEntry(length)</code></td><td><span data-es>Código PIN con puntos.</span><span data-en>Masked PIN code.</span></td></tr>
+      </tbody></table>
+    <pre><span class="k">from</span> pyphon.widgets import Label, TextInput, SearchView, AutoCompleteTextView, PINEntry
+
+Label(text=<span class="s">"Correo"</span>, size=16, color=Palette.PRIMARY)
+correo = TextInput(placeholder=<span class="s">"tucorreo@x.com"</span>, width=312)
+busq = SearchView(on_query=<span class="k">lambda</span> q: resultados.buscar(q))
+pin = PINEntry(length=4)   <span class="c"># acepta entrada numérica corta</span>
+hint = AutoCompleteTextView(suggestions=[<span class="s">"Madrid"</span>, <span class="s">"Málaga"</span>])</pre>
+
+    <h2>Pulsables y selectores</h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Para qué sirve</span><span data-en>Purpose</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>Button(text, on_click)</code></td><td><span data-es>Acción; el haptic visual se dispara al pulsar.</span><span data-en>Primary action with a visual pulse on press.</span></td></tr>
+        <tr><td><code>IconButton(icon_name)</code></td><td><span data-es>Botón cuadrado de icono.</span><span data-en>Square icon button.</span></td></tr>
+        <tr><td><code>FAB</code></td><td><span data-es>Botón flotante Material.</span><span data-en>Material floating action button.</span></td></tr>
+        <tr><td><code>Checkbox</code></td><td><span data-es>Conmutador simple.</span><span data-en>Simple toggle.</span></td></tr>
+        <tr><td><code>RadioButton / RadioGroup</code></td><td><span data-es>Elección exclusiva.</span><span data-en>Exclusive choice.</span></td></tr>
+        <tr><td><code>Switch / ToggleButton</code></td><td><span data-es>Encendido/apagado binario.</span><span data-en>Binary on/off.</span></td></tr>
+        <tr><td><code>Slider(min,max)</code> / <code>RangeSlider</code></td><td><span data-es>Valor o rango continuo.</span><span data-en>Continuous value or range.</span></td></tr>
+        <tr><td><code>SegmentedControl(segments)</code></td><td><span data-es>Selección en 2-5 segmentos.</span><span data-en>2-5 segment choice.</span></td></tr>
+      </tbody></table>
+    <pre>btn = Button(text=<span class="s">"Guardar"</span>, width=312, height=52,
+             on_click=<span class="k">lambda</span>: proyecto.guardar() )
+btn.on_click.connect(btn.haptic)   <span class="c"># pulso visual al tocar</span>
+
+Slider(value=50, min_val=0, max_val=100, width=280)</pre>
+
+    <h2>Avanzados y rating</h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Función</span><span data-en>Purpose</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>RatingBar(max_stars,rating)</code></td><td><span data-es>Valoración por estrellas.</span><span data-en>Star rating.</span></td></tr>
+        <tr><td><code>ColorPicker</code></td><td><span data-es>Selector de color sencillo.</span><span data-en>Simple colour picker.</span></td></tr>
+        <tr><td><code>NumberPicker / Stepper / Counter</code></td><td><span data-es>Entrada numérica por pasos.</span><span data-en>Numeric stepped input.</span></td></tr>
+        <tr><td><code>SignaturePad</code></td><td><span data-es>Zona de firma.</span><span data-en>Signature capture zone.</span></td></tr>
+        <tr><td><code>Dropdown(items)</code></td><td><span data-es>Lista desplegable.</span><span data-en>Dropdown list.</span></td></tr>
+      </tbody></table>
+
+    <h2 id="valid"><span data-es>Validación de formulario</span><span data-en>Form validation</span></h2>
+    <p><span data-es>Reglas declarativas sobre campos: obligatorio, longitud mínima/máxima, email, etc. Se validan en lote en <code>MobileApp</code> o con <code>FormValidator</code> de <code>core/form_validator.py</code>.</span><span data-en>Declarative rules over fields: required, min/max length, email and more, validated in a batch by <code>FormValidator</code> in <code>core/form_validator.py</code>.</span></p>
+    <pre><span class="k">from</span> pyphon.core.form_validator import FormValidator
+formulario = FormValidator()
+formulario.add_field(<span class="s">"user"</span>, user_input,
+                     [(<span class="s">"required",</span>), (<span class="s">"min_length",</span> 3)])
+formulario.add_field(<span class="s">"email"</span>, email_input,
+                     [(<span class="s">"required",</span>), (<span class="s">"email",</span>)])
+if formulario.validate():
+    print(<span class="s">"todo correcto"</span>)</pre>
+
+    <h2 id="media"><span data-es">Indicadores en línea</span><span data-en>Inline indicators</span></h2>
+    <p><span data-es><code>ProgressBar(value, indeterminate)</code> y <code>CircularProgressIndicator</code> gráficos de actividad; <code>Spinner</code> y <code>Badge</code> para marcadores.</span><span data-en><code>ProgressBar(value, indeterminate)</code> and <code>CircularProgressIndicator</code> activity graphs; <code>Spinner</code> and <code>Badge</code> for markers.</span></p>
+    <pre>barr = ProgressBar(progress=0.6)                 <span class="c"># anima progress=0 a 1</span>
+cargando = CircularProgressIndicator(indeterminate=<span class="k">True</span>)</pre>
+  </main>
+</div>
+<footer><div class="wrap"><span data-es>PyPhonOS · Controles y formularios.</span><span data-en>PyPhonOS · controls and forms.</span><span>v0.1.0</span></div></footer>
+<script src="../assets/js/app.js"></script>
+</body>
+</html>

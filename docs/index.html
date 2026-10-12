@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PyPhonOS · Documentación — UI móvil para Python (SDL2)</title>
+<meta name="description" content="Documentación de PyPhonOS, un conjunto de interfaces (UI) para Python sobre SDL2. Aprende a construir apps tipo Material con widgets, temas, animaciones e internacionalización.">
+<meta name="keywords" content="PyPhonOS, pyphon, UI, GUI, SDL2, Python, widgets, Material, documentación">
+<link rel="canonical" href="https://pyphonos.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PyPhonOS · Documentación">
+<meta property="og:description" content="Kit de UI para Python sobre SDL2. Widgets, temas, animaciones e i18n documentados con ejemplos.">
+<meta name="theme-color" content="#17171a">
+<style>
+:root{--bg:#fdfdfc;--bg-soft:#f6f6f4;--card:#fff;--ink:#17171a;--ink-2:#45454d;--ink-3:#82828d;--line:#e7e7ea;--line-2:#d8d8dd;--accent:#4f46e5;--accent-soft:#eef0ff;--code-bg:#14172c;--code-ink:#edeaf7;--radius:14px;--shadow:0 1px 2px rgba(23,23,26,.04),0 8px 26px rgba(23,23,26,.06)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:16px/1.66 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1180px;margin:0 auto;padding:0 26px}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(253,253,252,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}.topbar .inn{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:.75rem 26px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:750;color:var(--ink)}.brand .sub{font-weight:450;color:var(--ink-3);font-size:.76rem}
+.topnav{margin-left:auto;display:flex;align-items:center;gap:2px}.topnav a{color:var(--ink-2);font-size:.9rem;padding:.4rem .7rem;border-radius:8px}.topnav a:hover{background:var(--bg-soft);color:var(--ink);text-decoration:none}
+.lang{display:inline-flex;gap:2px;background:var(--bg-soft);border:1px solid var(--line);border-radius:8px;padding:2px;margin-left:8px}.lang button{border:0;background:transparent;font:inherit;font-size:.82rem;color:var(--ink-3);padding:.2rem .55rem;border-radius:6px;cursor:pointer}.lang button[data-on]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.1);font-weight:650}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center;padding:64px 0 46px}
+@media(max-width:880px){.hero{grid-template-columns:1fr}.hero aside{order:-1}}
+.eyebrow{color:var(--accent);font-weight:650;text-transform:uppercase;letter-spacing:.16em;font-size:.72rem}.hero h1{font-size:2.4rem;line-height:1.14;margin:.35rem 0}.hero p.lead{color:var(--ink-2);font-size:1.08rem;max-width:56ch}
+.pills{margin:1.4rem 0;display:flex;flex-wrap:wrap;gap:8px}.pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:.28rem .8rem;font-size:.84rem;color:var(--ink-2)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:10px;padding:.7rem 1.1rem;border:1px solid transparent;font-size:.95rem;font-family:inherit}.btn.p{background:var(--accent);color:#fff}.btn.p:hover{filter:brightness(.97);text-decoration:none}.btn.g{background:#fff;border-color:var(--line);color:var(--ink)}.btn.g:hover{background:var(--bg-soft);text-decoration:none}
+.cta{display:flex;gap:10px;margin:1.7rem 0 .4rem;flex-wrap:wrap}
+.code{background:var(--code-bg);border-radius:16px;color:var(--code-ink);padding:1rem 1.2rem .9rem;box-shadow:0 22px 60px rgba(23,23,26,.18);overflow:auto}
+pre{font:13px/1.75 ui-monospace,Consolas,Menlo,monospace;margin:0;color:#edeaf7}
+.code .c{color:#787f9e}.code .k{color:#7f9cff}.code .s{color:#a4e6a6}.code .si{color:#c9a7ff}
+.bar{display:flex;gap:4px;margin-bottom:.5rem}.bar i{width:10px;height:10px;border-radius:50%;background:#343753}.bar i:nth-child(1){background:#ff5f57}.bar i:nth-child(2){background:#febc2e}.bar i:nth-child(3){background:#28c840}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(255px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.2rem;height:100%;display:flex;flex-direction:column;transition:transform .16s,box-shadow .16s}
+a.card{color:inherit;text-decoration:none}a.card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.a-card .tic{display:flex;align-items:center;gap:10px;font-weight:680;color:var(--ink)}.a-card .tic::before{content:"";width:8px;height:8px;border-radius:3px;background:var(--accent)}.a-card p{color:var(--ink-2);font-size:.9rem;margin:.5rem 0 .5rem}
+.a-card .lbl{margin-top:auto;color:var(--accent);font-weight:650;font-size:.8rem;opacity:0;transition:opacity .15s}a.card:hover .lbl{opacity:1}
+.tag{max-width:1180px;margin:0 auto;padding:14px 26px 70px}
+h2{font-size:1.7rem;margin:0 0 .3rem}.sub{color:var(--ink-3);margin:0 0 1.5rem;max-width:72ch}
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:8px 0 58px}
+@media(max-width:860px){.strip{grid-template-columns:repeat(2,1fr)}}
+.kpi b{display:block;font-size:1.8rem;letter-spacing:-.02em}.kpi span{color:var(--ink-3);font-size:.86rem}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3rem;color:var(--ink-3);font-size:.9rem}
+footer .inn{max-width:1180px;margin:0 auto;display:flex;gap:18px;flex-wrap:wrap;justify-content:space-between;padding:0 26px}
+[data-en]{display:none}body[data-lang="en"] [data-es]{display:none}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a href="#main" style="position:absolute;left:-9999px">Saltar a contenido</a>
+<header class="topbar"><div class="inn">
+  <div class="brand">PyPhonOS<span class="sub">v0.1.0 · documentación</span></div>
+  <nav class="topnav" aria-label="Principal">
+    <a href="start.html"><span data-en>Start</span><span data-es>Guía</span></a>
+    <a href="#categorias"><span data-en>Categories</span><span data-es>Categorías</span></a>
+  </nav>
+  <div class="lang" role="group" aria-label="Idioma"><button type="button" data-lang="es" data-on>ES</button><button type="button" data-lang="en">EN</button></div>
+</div></header>
+
+<main id="main">
+<section class="hero wrap">
+  <div>
+    <span class="eyebrow">PyPhonOS · interfaz en Python sobre SDL2</span>
+    <h1><span data-es>Interfaces con estética móvil, renderizadas por GPU.</span><span data-en>Mobile-style interfaces rendered on the GPU.</span></h1>
+    <p><span data-es>PyPhonOS es una librería con la que describes vistas, controles, temas y animaciones en Python puro. El marco se encarga de crear la ventana, repartir los eventos y dibujar cada fotograma a través de SDL2. Esta documentación describe cada bloque de funcionalidad, para qué sirve y muestra cómo usarlo.</span><span data-en>PyPhonOS lets you describe views, controls, themes and animations in plain Python. The framework owns the window, event routing and per-frame drawing on top of SDL2. This documentation explains what every block does and how to use it.</span></p>
+    <div class="pills"><span class="pill">Python ≥ 3.9</span><span class="pill">PySDL2</span><span class="pill">Material 3</span><span class="pill">Widgets y layouts</span></div>
+    <div class="cta">
+      <a class="btn p" href="start.html"><span data-en>Getting started</span><span data-es>Primeros pasos</span></a>
+      <a class="btn g" href="#categorias"><span data-en>Browse by category</span><span data-es>Explorar por categoría</span></a>
+    </div>
+  </div>
+  <aside>
+  <div class="code"><div class="bar"><i></i><i></i><i></i></div><pre><span class="c"># demo.py — primera pantalla</span>
+<span class="k">from</span> pyphon.core.app import MobileApp
+<span class="k">from</span> pyphon.core.navigator import Screen
+<span class="k">from</span> pyphon.widgets import Button, VerticalLayout
+<span class="k">from</span> pyphon.renderer.colors import Palette
+
+<span class="k">class</span> <span class="si">Home</span>(Screen):
+    <span class="k">def</span> build(<span class="k">self</span>):
+        root = VerticalLayout(width=360, height=800,
+                              spacing=16, padding=24)
+        root.background_color = Palette.BACKGROUND
+        root.add_widget(Button(text=<span class="s">"Hola PyPhon"</span>))
+        self.add(root)
+
+<span class="k">def</span> main():
+    app = MobileApp(titulo=<span class="s">"Mi app"</span>, ancho=360, alto=800)
+    app.load_bundled_resources()
+    app.push_screen(Home())
+    app.run()
+
+main()</pre></div>
+  </aside>
+</section>
+
+<section class="tag" id="categorias">
+  <div class="strip">
+    <div class="kpi"><b>10</b><span data-es>secciones documentadas</span><span data-en>documented sections</span></div>
+    <div class="kpi"><b>50+</b><span data-es>tipos de widget</span><span data-en>widget types</span></div>
+    <div class="kpi"><b>4</b><span data-es>módulos del paquete</span><span data-en>package modules</span></div>
+    <div class="kpi"><b>2</b><span data-es>idiomas</span><span data-en>languages</span></div>
+  </div>
+
+  <h2 data-es>Documentación por categoría</h2><h2 data-en>Documentation by category</h2>
+  <p class="sub" data-es>Cada ficha abre la página que detalla las clases de ese bloque, explica para qué se usan y adjunta ejemplos listos para importar.</p>
+  <p class="sub" data-en>Every card opens the page describing that block's classes, what they are for and ready-to-import examples.</p>
+
+  <div class="grid">
+    <a class="card" href="start.html"><div class="tic">Primeros pasos</div><p data-es>Instalación, ventana y estructura de una aplicación.</p><p data-en>Installation, window and how an app is structured.</p><span class="lbl">Leer la guía →</span></a>
+    <a class="card" href="core/engine.html"><div class="tic">Motor y eventos</div><p data-es>MobileApp, bucle principal, señales y pila de navegación.</p><p data-en>MobileApp, main loop, signals and navigation stack.</p><span class="lbl">Documentación →</span></a>
+    <a class="card" href="core/animation-render.html"><div class="tic">Animación y render</div><p data-es>Animaciones con easing, tweens y primitivas del lienzo.</p><p data-en>Animated easing, tweens and canvas primitives.</p><span class="lbl">Documentación →</span></a>
+    <a class="card" href="core/theme-i18n.html"><div class="tic">Tema, color e i18n</div><p data-es>Tokens de color, modo claro/oscuro y traducciones.</p><p data-en>Colour tokens, light/dark themes and translations.</p><span class="lbl">Documentación →</span></a>
+    <a class="card" href="widgets/layout.html"><div class="tic">Layout y vistas</div><p data-es>Contenedores, scroll y diseño adaptativo por ruptura.</p><p data-en>Containers, scrolling and breakpoint-based authoring.</p><span class="lbl">Documentación →</span></a>
+    <a class="card" href="widgets/controls.html"><div class="tic">Controles y formularios</div><p data-es>Campos, botones, interruptores, sliders y validación.</p><p data-en>Fields, buttons, switches, sliders and validation.</p><span class="lbl">Documentación →</span></a>
+    <a class="card" href="widgets/feedback.html"><div class="tic">Feedback y diálogos</div><p data-es>Alertas, toasts, barras y estados de carga.</p><p data-en>Alerts, toasts, chips and loading states.</p><span class="lbl">Documentación →</span></a>
+    <a class="card" href="widgets/data-media.html"><div class="tic">Archivos, datos y media</div><p data-es>Selectores de archivos, multimedia, telemetría y chat.</p><p data-en>File pickers, media, telemetry and chat.</p><span class="lbl">Documentación →</span></a>
+    <a class="card" href="widgets/security-system.html"><div class="tic">Seguridad y sistema</div><p data-es>Biometría, accesibilidad y comportamiento de plataforma.</p><p data-en>Biometrics, accessibility and platform behaviour.</p><span class="lbl">Documentación →</span></a>
+    <a class="card" href="core/theme-i18n.html#color"><div class="tic">Renderer y colores</div><p data-es>Clases de color, iconografía y efectos de contraste.</p><p data-en>Colour classes, iconography and contrast utilities.</p><span class="lbl">Documentación →</span></a>
+  </div>
+</section>
+</main>
+
+<footer><div class="inn">
+  <div><span data-es>© 2025 Proyecto PyPhonOS · Documentación técnica de la librería pyphonos.</span><span data-en>© 2025 PyPhonOS Project · pyphonos library technical documentation.</span></div>
+  <div><a href="start.html"><span data-es>Guía de inicio</span><span data-en>Start guide</span></a></div>
+</div></footer>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

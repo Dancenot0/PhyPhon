@@ -1,0 +1,7 @@
+include README.md
+include LICENSE
+recursive-include examples *.py
+recursive-include pyphon/locales *.json
+recursive-include pyphon/assets/fonts *.ttf
+recursive-include pyphon *.py
+graft examples

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animación y renderer · PyPhonOS</title>
+<meta name="description" content="Easing, tweens, AnimationManager, efectos (contraste/glass/shadows) y primitivas del canvas SDL2 en PyPhonOS.">
+<link rel="stylesheet" href="../assets/css/docs.css">
+<meta name="theme-color" content="#17171a">
+</head>
+<body>
+<a class="skip" href="#con">Saltar al contenido</a>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="../index.html">PyPhonOS<span class="sub">docs</span></a>
+  <nav class="nav-doc" aria-label="Primario">
+    <a href="../index.html"><span data-es>Visita general</span><span data-en>Overview</span></a>
+    <a href="../start.html"><span data-es>Guía</span><span data-en>Guide</span></a>
+  </nav>
+  <div class="lang" role="group"><button type="button" data-lang="es" data-on>ES</button><button type="button" data-lang="en">EN</button></div>
+</div></header>
+
+<div class="doc">
+  <aside class="sidenav">
+    <h3><span data-es>Empieza aquí</span><span data-en>Get started</span></h3>
+    <nav>
+      <a href="../index.html"><span data-es>Visión general</span><span data-en>Overview</span></a>
+      <a href="../start.html"><span data-es>Primeros pasos</span><span data-en>Getting started</span></a>
+    </nav>
+    <h3><span data-es>Plataforma</span><span data-en>Platform</span></h3>
+    <nav>
+      <a href="engine.html"><span data-es>Motor y eventos</span><span data-en>Engine &amp; events</span></a>
+      <a class="active" href="animation-render.html"><span data-es>Animación y renderer</span><span data-en>Animation &amp; renderer</span></a>
+      <a href="theme-i18n.html"><span data-es>Tema, color e i18n</span><span data-en>Theme, colour &amp; i18n</span></a>
+    </nav>
+    <h3><span data-es>Widgets</span><span data-en>Widgets</span></h3>
+    <nav>
+      <a href="../widgets/layout.html"><span data-es>Layout y vistas</span><span data-en>Layout &amp; views</span></a>
+      <a href="../widgets/controls.html"><span data-es>Controles y formularios</span><span data-en>Controls &amp; forms</span></a>
+      <a href="../widgets/feedback.html"><span data-es>Feedback y diálogos</span><span data-en>Feedback &amp; dialogs</span></a>
+      <a href="../widgets/data-media.html"><span data-es>Archivos, datos y media</span><span data-en>Files, data &amp; media</span></a>
+      <a href="../widgets/security-system.html"><span data-es>Seguridad y sistema</span><span data-en>Security &amp; system</span></a>
+    </nav>
+  </aside>
+
+  <main class="content" id="con">
+    <span class="breadcrumb"><a href="../index.html">Docs</a> / Animación y renderer</span>
+    <h1><span data-es>Animación y renderizado</span><span data-en>Animation and rendering</span></h1>
+    <p><span data-es>El subpaquete <code>core</code> aporta un motor de animación por propiedades; <code>renderer</code> aporta el lienzo SDL2 y utilidades de dibujo como sombras, cristal y contraste.</span><span data-en>The <code>core</code> subpackage provides a property animation engine; <code>renderer</code> provides the SDL2 canvas plus drawing utilities such as shadows, glass and contrast.</span></p>
+
+    <h2 id="easing"><span data-es>Curvas de easing</span><span data-en>Easing curves</span></h2>
+    <p><span data-es>El catálogo <code>Easing.FUNCTIONS</code> devuelve funciones que mapean el progreso <code>t∈[0,1]</code> a un valor suavizado. Puedes usar <code>Easing.get(nombre)</code> o un nombre de cadena en cualquier animación.</span><span data-en>The <code>Easing.FUNCTIONS</code> catalog maps progress <code>t∈[0,1]</code> to a smoothed value. Use <code>Easing.get(name)</code> or any key string.</span></p>
+    <table class="api"><thead><tr><th>Nombre</th><th><span data-es>Comportamiento</span><span data-en>Behaviour</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>linear</code></td><td>Directo, sin aceleración.</td></tr>
+      <tr><td><code>ease_in / ease_out / ease_in_out</code></td><td><span data-es>Suaves para entradas/salidas.</span><span data-en>Soft at start, end or both.</span></td></tr>
+      <tr><td><code>bounce, elastic, spring, overshoot, decelerate, anticipate</code></td><td><span data-es>Efectos "físicos" para feedback táctil.</span><span data-en>Physics-like effects for tactile feedback.</span></td></tr>
+    </tbody></table>
+
+    <h2 id="anim">AnimationManager</h2>
+    <p><span data-es>Implementa <i>tweens</i> del valor de una propiedad del widget a otro con duración, delay y al terminar un callback.</span><span data-en>Implements property tweens to a target value with duration, delay and an on-complete callback.</span></p>
+    <pre><span class="k">m</span> = app.anim                    <span class="c"># AnimationManager de la app</span>
+m.tween(boton, <span class="s">"width"</span>, 280, duration=0.4, easing=<span class="s">"ease_out"</span>,
+         on_complete=<span class="k">lambda</span>: print(<span class="s">"listo"</span>))
+m.fade_in(carta)                   <span class="c"># opacidad 0→1</span>
+m.fade_out(carta)
+m.slide_in(panel)                  <span class="c"># desde fuera del área</span>
+m.slide_out(panel)
+m.scale(tarjeta, 1.2)              <span class="c"># hacia adelante</span>
+m.pulse(boton, scale_factor=1.05)  <span class="c"># micro-feedback "haptic"</span>
+m.stagger(secuencia, duration=0.3) <span class="c"># anima en lote encadenado</span>
+m.cancel(objetivo)                 <span class="c"># detiene tweens activos</span></pre>
+    <p><span data-es><i>Tip:</i> los widgets ya exponen un atajo <code>widget.animate(duration, easing, opacity=..., y=..., ...)</code> que delega aquí.</span><span data-en><i>Tip:</i> widgets expose a shortcut <code>widget.animate(duration, easing, opacity=..., y=..., ...)</code> that delegates here.</span></p>
+    <pre>boton.animate(y=200, opacity=0, duration=0.5, easing=<span class="s">"bounce"</span>)</pre>
+
+    <h2 id="canvas"><span data-es>Primitivas de bajo nivel</span><span data-en>Low-level primitives</span></h2>
+    <p><span data-es>Si extiendes un widget puedes dibujar tu propio <code>draw(canvas)</code>. El <code>Canvas</code> aporta rectas, círculos, esquinas redondeadas, sombras, texto y sprites.</span><span data-en>When writing a custom widget you implement <code>draw(canvas)</code>. The <code>Canvas</code> offers rects, circles, rounded corners, shadows, text and sprites.</span></p>
+    <table class="api"><thead><tr><th>Firma de ejemplo</th><th><span data-es>Uso</span><span data-en>Purpose</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>canvas.clear(rgb)</code></td><td><span data-es>Fondo.</span><span data-en>Background.</span></td></tr>
+      <tr><td><code>draw_rect / draw_circle / draw_rounded_rect</code></td><td><span data-es>Figuras planas/AA.</span><span data-en>Solid / anti-aliased shapes.</span></td></tr>
+      <tr><td><code>draw_text(texto,x,y,hex,size="Roboto-…")</code></td><td><span data-es>Texto TTF cacheado.</span><span data-en>Cached TTF text.</span></td></tr>
+      <tr><td><code>draw_image / draw_image_advanced</code></td><td><span data-es>Sprites PNG/JPG en la escena.</span><span data-en>PNG/JPG sprites in the scene.</span></td></tr>
+      <tr><td><code>measure_text(text,size)</code></td><td><span data-es>Ancho/alto previo a pintar.</span><span data-en>Width/height before painting.</span></td></tr>
+      <tr><td><code>draw_shadow / _shape_cache</code></td><td><span data-es>Sombras difuminadas reutilizables.</span><span data-en>Reusable soft shadows.</span></td></tr>
+    </tbody></table>
+    <pre><span class="k">def</span> draw(<span class="k">self</span>, canvas):
+    canvas.draw_rounded_rect(self.x, self.y, self.width,
+                             self.height, 12,
+                             self.background_color.to_hex())
+    canvas.draw_text(self.texto, self.x+10, self.y+8,
+                     <span class="s">"#1a1a1a"</span>, size=18)</pre>
+
+    <h2 id="fx"><span data-es>Utilidades de renderer/effects</span><span data-en>renderer/effects helpers</span></h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Para qué sirve</span><span data-en>What it is for</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>ContrastEngine</code></td><td><span data-es>Luminancia relativa, ratio de contraste y comprobaciones WCAG AA.</span><span data-en>Relative luminance, contrast ratio and WCAG AA checks.</span></td></tr>
+      <tr><td><code>DynamicShadow</code></td><td><span data-es>Calcula y pinta sombra para elevar elementos.</span><span data-en>Computes and paints a shadow to elevate elements.</span></td></tr>
+      <tr><td><code>GlassPanel</code></td><td><span data-es>Fondo tipo "cristal esmerilado" translúcido y con brillo; variante oscura.</span><span data-en>Frosted, translucent "glass" backdrop; dark variant included.</span></td></tr>
+      <tr><td><code>IconDB</code> (icons)</td><td><span data-es>Diccionario de 230 iconos tipográficos con búsqueda y por categorías.</span><span data-en>230 glyph icons with search and categories.</span></td></tr>
+    </tbody></table>
+    <pre><span class="k">from</span> pyphon.renderer.effects import ContrastEngine
+fondo = Color(80, 40, 120)
+if ContrastEngine.meets_wcag_aa(fondo, Color(255,255,255)):
+    texto = Palette.ON_PRIMARY
+<span class="k">else</span>:
+    texto = ContrastEngine.get_text_color(fondo)</pre>
+  </main>
+</div>
+<footer><div class="wrap">
+  <span data-es>PyPhonOS · Animación y renderer.</span><span data-en>PyPhonOS · animation &amp; renderer.</span><span>v0.1.0</span>
+</div></footer>
+<script src="../assets/js/app.js"></script>
+</body>
+</html>

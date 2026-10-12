@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archivos, datos y media · PyPhonOS</title>
+<meta name="description" content="Selectores de archivos y carpetas, tarjetas, vistas de datos, multimedia y componentes de chat en PyPhonOS.">
+<link rel="stylesheet" href="../assets/css/docs.css"><meta name="theme-color" content="#17171a">
+</head>
+<body>
+<a class="skip" href="#con">Saltar al contenido</a>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="../index.html">PyPhonOS<span class="sub">docs</span></a>
+  <nav class="nav-doc" aria-label="Primario"><a href="../index.html"><span data-es>Inicio</span><span data-en>Overview</span></a><a href="../start.html"><span data-es>Guía</span><span data-en>Guide</span></a></nav>
+  <div class="lang" role="group"><button type="button" data-lang="es" data-on>ES</button><button type="button" data-lang="en">EN</button></div>
+</div></header>
+<div class="doc">
+  <aside class="sidenav">
+    <h3><span data-es>Empieza aquí</span><span data-en>Get started</span></h3>
+    <nav><a href="../index.html"><span data-es>Visión general</span><span data-en>Overview</span></a><a href="../start.html"><span data-es>Primeros pasos</span><span data-en>Getting started</span></a></nav>
+    <h3><span data-es>Plataforma</span><span data-en>Platform</span></h3>
+    <nav><a href="../core/engine.html"><span data-es>Motor y eventos</span><span data-en>Engine &amp; events</span></a><a href="../core/animation-render.html"><span data-es>Animación y renderer</span><span data-en>Animation &amp; renderer</span></a><a href="../core/theme-i18n.html"><span data-es>Tema, color e i18n</span><span data-en>Theme, colour &amp; i18n</span></a></nav>
+    <h3><span data-es>Widgets</span><span data-en>Widgets</span></h3>
+    <nav><a href="layout.html"><span data-es>Layout y vistas</span><span data-en>Layout &amp; views</span></a><a href="controls.html"><span data-es>Controles y formularios</span><span data-en>Controls &amp; forms</span></a><a href="feedback.html"><span data-es>Feedback y diálogos</span><span data-en>Feedback &amp; dialogs</span></a><a class="active" href="data-media.html"><span data-es>Archivos, datos y media</span><span data-en>Files, data &amp; media</span></a><a href="security-system.html"><span data-es>Seguridad y sistema</span><span data-en>Security &amp; system</span></a></nav>
+  </aside>
+  <main class="content" id="con">
+    <span class="breadcrumb"><a href="../index.html">Docs</a> / Widgets / Datos y media</span>
+    <h1><span data-es>Archivos, tarjetas y multimedia</span><span data-en>Files, cards and media</span></h1>
+    <p><span data-es>Conjunto centrado en datos y contexto del dispositivo, además de componentes para mostrar listados y contenido visual.</span><span data-en>A data- and device-oriented set, plus components for lists and visual content.</span></p>
+
+    <h2 id="files">Acceso a archivos</h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Para qué sirve</span><span data-en>Purpose</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>FilePicker</code></td><td><span data-es>Elegir un archivo del entorno.</span><span data-en>Pick a file from the environment.</span></td></tr>
+        <tr><td><code>DirectoryPicker</code></td><td><span data-es>Seleccionar una carpeta.</span><span data-en>Select a folder.</span></td></tr>
+        <tr><td><code>FileExplorer</code></td><td><span data-es>Navegar por un sistema de ficheros.</span><span data-en>Browse a filesystem.</span></td></tr>
+      </tbody></table>
+    <pre><span class="k">from</span> pyphon.widgets import FilePicker, FileExplorer, DirectoryPicker
+
+fp = FilePicker(path=<span class="s">"."</span>)        <span class="c"># resuelve rutas con separador según OS</span>
+carpetas = DirectoryPicker()       <span class="c"># para elegir destino de exportación</span>
+arbol = FileExplorer()             <span class="c"># lista del último directorio</span></pre>
+    <p><span data-es>Estos widgets inspeccionan el disco local vía <code>os/pathlib</code>; comprueban <code>os.path</code> antes de presentar cada entrada. Es un acceso directo al sistema, sin permisos nativos extra.</span><span data-en>These widgets inspect the local drive through <code>os/pathlib</code> and stat each entry before listing it. Direct filesystem access, no extra native permissions.</span></p>
+
+    <h2 id="card">Tarjetas y imagen</h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Para qué sirve</span><span data-en>Purpose</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>Card</code></td><td><span data-es>Superficie elevada con esquinas y sombra.</span><span data-en>Elevated, rounded surface.</span></td></tr>
+        <tr><td><code>Image</code></td><td><span data-es>Carga PNG/JPG de ruta local en el lienzo.</span><span data-en>Loads a local PNG/JPG into the canvas.</span></td></tr>
+        <tr><td><code>ImageView / GalleryView</code></td><td><span data-es>Vista de una imagen o galería.</span><span data-en>Single image or gallery view.</span></td></tr>
+      </tbody></table>
+    <pre><span class="k">from</span> pyphon.widgets import Card, Image, ImageView
+
+targeta = Card(width=300, height=180)
+imagen = Image(src=<span class="s">"foto.png"</span>)      <span class="c"># png/jpg; carga diferida sobre canvas</span>
+targeta.add_child(imagen)</pre>
+
+    <h2 id="media">Multimedia y reproductores</h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Intención</span><span data-en>Intended for</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>VideoView / AudioPlayer / MediaController</code></td><td><span data-es>Reproducción y control de medios.</span><span data-en>Playback and media control.</span></td></tr>
+        <tr><td><code>CameraView</code></td><td><span data-es>Vista previa de cámara (entorno de dispositivos).</span><span data-en>Camera preview (device environments).</span></td></tr>
+        <tr><td><code>WaveformView</code></td><td><span data-es>Gráfica de forma de onda.</span><span data-en>Waveform graph.</span></td></tr>
+      </tbody></table>
+    <div class="note"><span data-es>Estos comportamientos dependen del hardware/contenedores; en el bucle SDL2 mínimo se exponen como widgets de superficie para integrar motores externos.</span><span data-en>These behaviours depend on hardware/hosts; in the minimal SDL2 loop they are exposed as surface widgets for integrating external engines.</span></div>
+
+    <h2 id="state">Info del sistema</h2>
+    <pre><span class="k">from</span> pyphon.widgets import StorageInfo, BatteryIndicator, NetworkStatus
+
+libre = StorageInfo()          <span class="c"># espacio de la unidad actual</span>
+bateria = BatteryIndicator()   <span class="c"># nivel de batería si el SO lo reporta</span>
+red = NetworkStatus()          <span class="c"># conectividad / estado WiFi</span></pre>
+
+    <h2 id="chat">Conversación</h2>
+    <pre><span class="k">from</span> pyphon.widgets import ChatBubble, MessageView, NotificationCenter
+
+burbuja = ChatBubble(message=<span class="s">"Hola"</span>, is_me=<span class="k">True</span>)
+thread = MessageView()      thread.add_child(burbuja)
+notif = NotificationCenter()   <span class="c"># cola de avisos del sistema</span></pre>
+
+    <h2 id="spec"><span data-es>Vistas especializadas (vista previa)</span><span data-en>Specialized views (preview)</span></h2>
+    <p><span data-es><code>specialized.py</code> y <code>advanced.py</code> agrupan scaffolds de engranes más ambiciosos —<code>WebView</code>, <code>MapView</code>, <code>ChartView</code>, <code>CalendarView</code>, editores, y vocabulario AR/VR/<i>neumorfismo</i>— que definen su contrato visual y dejan dibujos a un backend concreto. Si tu escena ya tiene un host (por ejemplo, un canvas Web o GL), estos proveen el punto de enganche y las propiedades esperadas.</span><span data-en><code>specialized.py</code> and <code>advanced.py</code> group more ambitious engine scaffolds — <code>WebView</code>, <code>MapView</code>, <code>ChartView</code>, <code>CalendarView</code>, editors, and AR/VR/neumorphic vocabulary — which define their visual contract and delegate drawing to a concrete backend. If your scene already owns a host, they provide the hook points and expected properties.</span></p>
+    <div class="tip"><span data-es>Para listar qué campos espera cada visita, abre el widget en el intérprete:</span><span data-en>To see which fields each widget expects, inspect in a REPL:</span></div>
+    <pre><span class="k">from</span> pyphon.widgets.specialized import CalendarView
+print(CalendarView.__init__.__doc__)   <span class="c"># o inspecciona el __init__</span></pre>
+  </main>
+</div>
+<footer><div class="wrap"><span data-es>PyPhonOS · Archivos, datos y media.</span><span data-en>PyPhonOS · files, data and media.</span><span>v0.1.0</span></div></footer>
+<script src="../assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Primeros pasos · PyPhonOS</title>
+<meta name="description" content="Instala PyPhonOS (pip install pyphonos), importa MobileApp y dibuja tu primera ventana con una pantalla en SDL2.">
+<link rel="canonical" href="https://pyphonos.github.io/start.html">
+<meta name="theme-color" content="#17171a">
+<meta property="og:title" content="PyPhonOS — Primeros pasos">
+<meta property="og:description" content="Instalación, estructura de una app y primera ventana.">
+<link rel="stylesheet" href="assets/css/docs.css">
+</head>
+<body>
+<a class="skip" href="#con">Saltar al contenido</a>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="index.html"><span style="font-weight:760">PyPhonOS</span><span class="sub">docs</span></a>
+  <nav class="nav-doc" aria-label="Primario">
+    <a href="index.html"><span data-es>Visita general</span><span data-en>Overview</span></a>
+    <a href="start.html" class="active"><span data-es>Guía</span><span data-en>Guide</span></a>
+  </nav>
+  <div class="lang" role="group" aria-label="Idioma"><button type="button" data-lang="es" data-on>ES</button><button type="button" data-lang="en">EN</button></div>
+</div></header>
+
+<div class="doc">
+  <aside class="sidenav">
+    <h3 data-es>Empieza aquí</h3>
+    <nav>
+      <a href="index.html"><span data-es>Visión general</span><span data-en>Overview</span></a>
+      <a class="active" href="start.html"><span data-es>Primeros pasos</span><span data-en>Getting started</span></a>
+    </nav>
+    <h3 data-es>Plataforma</h3>
+    <nav>
+      <a href="core/engine.html"><span data-es>Motor y eventos</span><span data-en>Engine &amp; events</span></a>
+      <a href="core/animation-render.html"><span data-es>Animación y renderer</span><span data-en>Animation &amp; renderer</span></a>
+      <a href="core/theme-i18n.html"><span data-es>Tema, color e i18n</span><span data-en>Theme, colour &amp; i18n</span></a>
+    </nav>
+    <h3 data-es>Widgets</h3>
+    <nav>
+      <a href="widgets/layout.html"><span data-es>Layout y vistas</span><span data-en>Layout &amp; views</span></a>
+      <a href="widgets/controls.html"><span data-es>Controles y formularios</span><span data-en>Controls &amp; forms</span></a>
+      <a href="widgets/feedback.html"><span data-es>Feedback y diálogos</span><span data-en>Feedback &amp; dialogs</span></a>
+      <a href="widgets/data-media.html"><span data-es>Archivos, datos y media</span><span data-en>Files, data &amp; media</span></a>
+      <a href="widgets/security-system.html"><span data-es>Seguridad y sistema</span><span data-en>Security &amp; system</span></a>
+    </nav>
+  </aside>
+
+  <main class="content" id="con">
+    <span class="breadcrumb"><a href="index.html">Inicio</a> / <a href="start.html">Primeros pasos</a></span>
+    <h1 data-es>Primeros pasos con PyPhonOS</h1>
+    <h1 data-en>Getting started with PyPhonOS</h1>
+    <p class="lead" data-es>Estos pasos te llevan de un entorno limpio a una ventana con su primer contenido en unos minutos.</p>
+    <p class="lead" data-en>These steps take you from a clean environment to a window with your first content in minutes.</p>
+
+    <h2 id="instalar" data-es>1 · Instalación</h2>
+    <h2 id="instalar" data-en>1 · Installation</h2>
+    <p data-es>La distribución se llama <code>pyphonos</code> y el paquete de importación <code>pyphon</code>.</p>
+    <p data-en>The distribution is <code>pyphonos</code>; the import package is <code>pyphon</code>.</p>
+    <pre><span class="c"># Python >= 3.9</span>
+pip install pyphonos</pre>
+    <p data-es>PySDL2 se instala de forma automática. En Windows puedes añadir el extra <code>binary</code> para obtener las bibliotecas nativas SDL2, SDL2_ttf y SDL2_image sin instalarlas a mano:</p>
+    <p data-en>PySDL2 installs automatically. On Windows, add the <code>binary</code> extra to ship the SDL2, SDL2_ttf and SDL2_image native libraries without manual setup.</p>
+    <pre>pip install "pyphonos[binary]"</pre>
+
+    <h2 id="ventana" data-es>2 · Tu primera ventana</h2>
+    <h2 id="ventana" data-en>2 · Your first window</h2>
+    <p data-es>Crea un <code>MobileApp</code>, pide una <code>Screen</code> raíz y ejecuta el bucle con <code>run()</code>.</p>
+    <pre><span class="k">from</span> pyphon.core.app import MobileApp
+
+app = MobileApp(titulo=<span class="s">"Hola"</span>, ancho=360, alto=640)
+<span class="c"># 360x640 es la resolución lógica; la GPU escala a pantalla completa.</span>
+app.run()</pre>
+    <p data-es>Solo con esto ya se abre una ventana resizable y con sondeo de eventos a 60 FPS. Cierra con Esc o la X.</p>
+
+    <h2 id="estructura" data-es>3 · Estructura de una app</h2>
+    <h2 id="estructura" data-en>3 · App structure</h2>
+    <p data-es>El patrón es: construye una <code>Screen</code>, añade widgets, y cuando la app navegue la mostrará. Cada pantalla implementa <code>build()</code>.</p>
+    <pre><span class="k">from</span> pyphon.core.app import MobileApp
+<span class="k">from</span> pyphon.core.navigator import Screen
+<span class="k">from</span> pyphon.widgets import (
+    Button, Label, VerticalLayout, StatusBar)
+
+<span class="k">class</span> <span class="si">Home</span>(Screen):
+    <span class="k">def</span> build(<span class="k">self</span>):
+        root = VerticalLayout(width=360, height=640, spacing=14)
+        root.add_widget(StatusBar(width=360))
+        root.add_widget(Label(text=<span class="s">"Bienvenido"</span>, size=34))
+        boton = Button(text=<span class="s">"Pulsa"</span>,
+                        on_click=<span class="k">lambda</span>: print(<span class="s">"ok"</span>))
+        root.add_widget(boton)
+        self.add(root)
+
+<span class="k">def</span> main():
+    app = MobileApp(titulo=<span class="s">"Demo"</span>)
+    app.load_bundled_resources()  <span class="c"># locales y tema del paquete</span>
+    app.push_screen(Home())       <span class="c"># lo muestra con animación</span>
+    app.run()
+
+main()</pre>
+
+    <h2 id="recursos" data-es>4 · Recursos empaquetados</h2>
+    <h2 id="recursos" data-en>4 · Bundled assets</h2>
+    <p data-es>El distributable incluye tipografías Roboto, traducciones <code>es.json</code>/<code>en.json</code> y un <code>theme.json</code>. La llamada <code>load_bundled_resources()</code> los registra. Para acceso de bajo nivel:</p>
+    <pre><span class="k">from</span> pyphon._res import FONTS_DIR, LOCALES_DIR, THEME_JSON</pre>
+    <p data-es>Siempre que dibujes texto, el lienzo los buscará solo si colocas la fuente en <code>assets/fonts</code>, algo que ya ocurre con Roboto-Regular y Roboto-Medium tras instalar.</p>
+
+    <div class="tip">
+      <span data-es><b>Siguiente:</b> <a href="core/engine.html">Motor y eventos</a> — navega entre pantallas y conecta señales.</span>
+      <span data-en><b>Next:</b> <a href="core/engine.html">Engine &amp; events</a> — move between screens and connect signals.</span>
+    </div>
+  </main>
+</div>
+
+<footer><div class="wrap">
+  <span data-es>PyPhonOS · Biblioteca gtk-like para interfaces en SDL2.</span><span data-en>PyPhonOS · An SDL2 UI toolkit for Python.</span>
+  <span>v0.1.0</span>
+</div></footer>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

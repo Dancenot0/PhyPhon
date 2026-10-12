@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Layout y vistas · PyPhonOS</title>
+<meta name="description" content="Widgets contenedores (layouts), vistas de scroll, barras de navegación y diseño responsivo de PyPhonOS.">
+<link rel="stylesheet" href="../assets/css/docs.css">
+<meta name="theme-color" content="#17171a">
+</head>
+<body>
+<a class="skip" href="#con">Saltar al contenido</a>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="../index.html">PyPhonOS<span class="sub">docs</span></a>
+  <nav class="nav-doc" aria-label="Primario">
+    <a href="../index.html"><span data-es>Visita general</span><span data-en>Overview</span></a>
+    <a href="../start.html"><span data-es>Guía</span><span data-en>Guide</span></a>
+  </nav>
+  <div class="lang" role="group"><button type="button" data-lang="es" data-on>ES</button><button type="button" data-lang="en">EN</button></div>
+</div></header>
+
+<div class="doc">
+  <aside class="sidenav">
+    <h3><span data-es>Empieza aquí</span><span data-en>Get started</span></h3>
+    <nav>
+      <a href="../index.html"><span data-es>Visión general</span><span data-en>Overview</span></a>
+      <a href="../start.html"><span data-es>Primeros pasos</span><span data-en>Getting started</span></a>
+    </nav>
+    <h3><span data-es>Plataforma</span><span data-en>Platform</span></h3>
+    <nav>
+      <a href="../core/engine.html"><span data-es>Motor y eventos</span><span data-en>Engine &amp; events</span></a>
+      <a href="../core/animation-render.html"><span data-es>Animación y renderer</span><span data-en>Animation &amp; renderer</span></a>
+      <a href="../core/theme-i18n.html"><span data-es>Tema, color e i18n</span><span data-en>Theme, colour &amp; i18n</span></a>
+    </nav>
+    <h3><span data-es>Widgets</span><span data-en>Widgets</span></h3>
+    <nav>
+      <a class="active" href="layout.html"><span data-es>Layout y vistas</span><span data-en>Layout &amp; views</span></a>
+      <a href="controls.html"><span data-es>Controles y formularios</span><span data-en>Controls &amp; forms</span></a>
+      <a href="feedback.html"><span data-es>Feedback y diálogos</span><span data-en>Feedback &amp; dialogs</span></a>
+      <a href="data-media.html"><span data-es>Archivos, datos y media</span><span data-en>Files, data &amp; media</span></a>
+      <a href="security-system.html"><span data-es>Seguridad y sistema</span><span data-en>Security &amp; system</span></a>
+    </nav>
+  </aside>
+
+  <main class="content" id="con">
+    <span class="breadcrumb"><a href="../index.html">Docs</a> / Widgets / Layout</span>
+    <h1><span data-es>Contenedores y vistas</span><span data-en>Containers and views</span></h1>
+    <p><span data-es>Cada contenedor hereda de <code>Widget</code> y organiza a sus <code>add_child()</code>. Eliges ancho, alto, espaciado y padding; los hijos se reparten según la política del layout.</span><span data-en>Every container inherits from <code>Widget</code> and lays out its children through <code>add_child()</code>. You choose width, height, spacing and padding; children are arranged by the container's policy.</span></p>
+
+    <h2 id="cajas">Cajas y rejillas</h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Cómo reparte los hijos</span><span data-en>How children are arranged</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>VerticalLayout</code> / <code>HorizontalLayout</code></td><td><span data-es>Columna o fila con espaciado uniforme.</span><span data-en>Column or row with even spacing.</span></td></tr>
+        <tr><td><code>BoxLayout</code></td><td><span data-es>Base genérica; acepta orientación.</span><span data-en>Generic base; accepts an orientation.</span></td></tr>
+        <tr><td><code>LinearLayout</code> / <code>FrameLayout</code> / <code>RelativeLayout</code></td><td><span data-es>Familia lineal, superpuesta o por anclas relativas.</span><span data-en>Linear, stacked or anchor-relative family.</span></td></tr>
+        <tr><td><code>GridLayout(columns=N)</code></td><td><span data-es>Malla de N columnas.</span><span data-en>Grid of N columns.</span></td></tr>
+        <tr><td><code>TableLayout</code> / <code>ConstraintLayout</code> / <code>CoordinatorLayout</code></td><td><span data-es>Filas/celdas, restricciones y coordinación de overlays.</span><span data-en>Rows/cells, constraints and overlay coordination.</span></td></tr>
+      </tbody></table>
+    <pre><span class="k">from</span> pyphon.widgets import VerticalLayout, HorizontalLayout, GridLayout, FrameLayout, RelativeLayout, ConstraintLayout, CoordinatorLayout, BoxLayout, LinearLayout, TableLayout
+
+root = VerticalLayout(width=360, height=640, spacing=14, padding=16)
+root.background_color = Palette.BACKGROUND
+
+fila = HorizontalLayout(spacing=10)
+fila.add_widget(Button(text=<span class="s">"A"</span>))
+fila.add_widget(Button(text=<span class="s">"B"</span>))
+root.add_widget(fila)
+
+malla = GridLayout(columns=2, spacing=12, padding=16)
+malla.add_widget(Card())     <span class="c"># los hijos se van llenando por celdas</span>
+malla.add_widget(Card())
+root.add_widget(malla)</pre>
+
+    <h2 id="scroll"><span data-es>Vistas con scroll</span><span data-en>Scrolling views</span></h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Para qué sirve</span><span data-en>Purpose</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>ScrollView</code></td><td><span data-es>Contenido más alto que la ventana.</span><span data-en>Content taller than the viewport.</span></td></tr>
+        <tr><td><code>ListView</code> / <code>GridView</code></td><td><span data-es>Listas/rejillas con celdas reutilizadas.</span><span data-en>Lists/grids reusing cells.</span></td></tr>
+        <tr><td><code>RecyclerView</code> / <code>ViewPager</code></td><td><span data-es>Flujo virtual y páginas deslizables.</span><span data-en>Virtualized flow and swipeable pages.</span></td></tr>
+        <tr><td><code>SwipeRefreshLayout</code></td><td><span data-es>Recargar jalando desde arriba.</span><span data-en>Pull-to-refresh.</span></td></tr>
+      </tbody></table>
+    <pre>feed = ScrollView(width=360, height=520)
+for n in range(12):
+    feed.add_widget(Card(height=72))</pre>
+
+    <h2 id="appbar"><span data-es>Barras de aplicación y navegación</span><span data-en>App bars and top navigation</span></h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Uso típico</span><span data-en>Typical use</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>StatusBar</code></td><td><span data-es>Franja superior con reloj/indicadores.</span><span data-en>Top strip with clock/indicators.</span></td></tr>
+        <tr><td><code>Toolbar(title)</code> / <code>AppBarLayout</code></td><td><span data-es>Cabeza con título y acciones.</span><span data-en>Leading title and actions.</span></td></tr>
+        <tr><td><code>TabLayout</code> + <code>TabItem</code></td><td><span data-es>Pestañas bajo la barra.</span><span data-en>Tabs under the bar.</span></td></tr>
+        <tr><td><code>BottomNavigationView</code> + <code>BottomNavItem</code></td><td><span data-es>Navegación inferior (0-3 itinerarios).</span><span data-en>Bottom navigation (3-5 tiles).</span></td></tr>
+        <tr><td><code>NavigationBar</code></td><td><span data-es>Barra de iconos adaptable.</span><span data-en>Adaptable icon rail/bar.</span></td></tr>
+        <tr><td><code>DrawerLayout(drawer_width=…)</code></td><td><span data-es>Cajón lateral deslizable.</span><span data-en>Sliding side drawer.</span></td></tr>
+        <tr><td><code>Breadcrumb(path)</code></td><td><span data-es>Ruta de navegación interna.</span><span data-en>Inner navigation path.</span></td></tr>
+      </tbody></table>
+    <pre><span class="k">from</span> pyphon.widgets import StatusBar, Toolbar, BottomNavigationView, BottomNavItem, TabLayout, TabItem, DrawerLayout, Breadcrumb
+
+cromo = VerticalLayout(width=360, height=640)
+cromo.add_widget(StatusBar(width=360))
+cromo.add_widget(Toolbar(title=<span class="s">"Tienda"</span>))
+cromo.add_widget(DrawerLayout(width=360, height=440,
+                              drawer_width=280))</pre>
+
+    <h2 id="resp"><span data-es>Diseño responsivo por puntos de ruptura</span><span data-en>Breakpoint-based responsive design</span></h2>
+    <table class="api"><thead><tr><th>Clase</th><th><span data-es>Función</span><span data-en>Purpose</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>ResponsiveLayout</code></td><td><span data-es>Reordena hijos según el ancho disponible.</span><span data-en>Re-arranges children by available width.</span></td></tr>
+        <tr><td><code>AdaptiveScaffold</code></td><td><span data-es>Máquina para móvil/tableta/escritorio.</span><span data-en>Scaffold for phone/tablet/desktop.</span></td></tr>
+        <tr><td><code>MediaQuery</code> / <code>Breakpoint</code></td><td><span data-es>Consulta de <code>app_width/app_height</code>.</span><span data-en>Query on <code>app_width/app_height</code>.</span></td></tr>
+      </tbody></table>
+  </main>
+</div>
+<footer><div class="wrap"><span data-es>PyPhonOS · Contenedores y vistas.</span><span data-en>PyPhonOS · containers and views.</span><span>v0.1.0</span></div></footer>
+<script src="../assets/js/app.js"></script>
+</body>
+</html>

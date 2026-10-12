@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tema, color e i18n · PyPhonOS</title>
+<meta name="description" content="Tokens de color Material, paletas, modo oscuro/acento, internacionalización (es/en) y recarga de temas en PyPhonOS.">
+<link rel="stylesheet" href="../assets/css/docs.css">
+<meta name="theme-color" content="#17171a">
+<meta property="og:title" content="PyPhonOS — Tema, color e i18n">
+</head>
+<body>
+<a class="skip" href="#con">Saltar al contenido</a>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="../index.html">PyPhonOS<span class="sub">docs</span></a>
+  <nav class="nav-doc" aria-label="Primario">
+    <a href="../index.html"><span data-es>Visita general</span><span data-en>Overview</span></a>
+    <a href="../start.html"><span data-es>Guía</span><span data-en>Guide</span></a>
+  </nav>
+  <div class="lang" role="group"><button type="button" data-lang="es" data-on>ES</button><button type="button" data-lang="en">EN</button></div>
+</div></header>
+
+<div class="doc">
+  <aside class="sidenav">
+    <h3><span data-es>Empieza aquí</span><span data-en>Get started</span></h3>
+    <nav>
+      <a href="../index.html"><span data-es>Visión general</span><span data-en>Overview</span></a>
+      <a href="../start.html"><span data-es>Primeros pasos</span><span data-en>Getting started</span></a>
+    </nav>
+    <h3><span data-es>Plataforma</span><span data-en>Platform</span></h3>
+    <nav>
+      <a href="engine.html"><span data-es>Motor y eventos</span><span data-en>Engine &amp; events</span></a>
+      <a href="animation-render.html"><span data-es>Animación y renderer</span><span data-en>Animation &amp; renderer</span></a>
+      <a class="active" href="theme-i18n.html"><span data-es>Tema, color e i18n</span><span data-en>Theme, colour &amp; i18n</span></a>
+    </nav>
+    <h3><span data-es>Widgets</span><span data-en>Widgets</span></h3>
+    <nav>
+      <a href="../widgets/layout.html"><span data-es>Layout y vistas</span><span data-en>Layout &amp; views</span></a>
+      <a href="../widgets/controls.html"><span data-es>Controles y formularios</span><span data-en>Controls &amp; forms</span></a>
+      <a href="../widgets/feedback.html"><span data-es>Feedback y diálogos</span><span data-en>Feedback &amp; dialogs</span></a>
+      <a href="../widgets/data-media.html"><span data-es>Archivos, datos y media</span><span data-en>Files, data &amp; media</span></a>
+      <a href="../widgets/security-system.html"><span data-es>Seguridad y sistema</span><span data-en>Security &amp; system</span></a>
+    </nav>
+  </aside>
+
+  <main class="content" id="con">
+    <span class="breadcrumb"><a href="../index.html">Docs</a> / Tema y color</span>
+    <h1><span data-es>Tema, color y traducciones</span><span data-en>Theming, colour and translations</span></h1>
+    <p><span data-es>Basado en <i>Material Design 3</i>. Separa el color en dos capas: una paleta estática (<code>renderer/colors.py</code>) y un gestor dinámico (<code>core/theme.py</code>) que remapea tokens según modo y acento.</span><span data-en>Built on Material Design 3 ideas. Colour is split in two layers: a static palette (<code>renderer/colors.py</code>) and a dynamic manager (<code>core/theme.py</code>) that remaps tokens by mode and accent.</span></p>
+
+    <h2 id="color" data-es>La clase Color</h2>
+    <p data-es>Valor RGBA con conversión CSS y derivados armónicos.</p>
+    <table class="api"><thead><tr><th>Método</th><th><span data-es>Función</span><span data-en>Purpose</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>Color(r,g,b,a=255)</code></td><td><span data-es>Construir un color normalizado.</span><span data-en>Build a normalized colour.</span></td></tr>
+        <tr><td><code>to_hex() / from_hex()</code></td><td><span data-es>Conversión a/desde <code>#rrggbb</code>.</span><span data-en>Convert to/from a <code>#rrggbb</code> string.</span></td></tr>
+        <tr><td><code>brighten(n) / darken(n)</code></td><td><span data-es>Tono derivado para estados.</span><span data-en>Derived tone for states.</span></td></tr>
+      </tbody></table>
+    <pre><span class="k">from</span> pyphon.renderer.colors import Color
+c = Color(26, 35, 126)
+print(c.to_hex())            <span class="c"># "#1A237e"</span>
+claro = c.brighten(0.15)     <span class="c"># para estados "pressed"</span></pre>
+
+    <h2 id="palette">Palette</h2>
+    <p><span data-es>Conjunto global de colores semánticos del tema: <code>PRIMARY</code>, <code>BACKGROUND</code>, <code>SURFACE</code>, <code>OUTLINE</code>, grises y más. Es lo que uses en los widgets por defecto.</span><span data-en>Global set of semantic colours: <code>PRIMARY</code>, <code>BACKGROUND</code>, <code>SURFACE</code>, <code>OUTLINE</code>, greys and more, used as defaults across widgets.</span></p>
+    <pre>widget.background_color = Palette.SURFACE
+texto.color = Palette.PRIMARY</pre>
+
+    <h2 id="theme">ThemeManager</h2>
+    <p><span data-es>Expone tokens derivados del acento y del modo (propiedades como <code>primary</code>, <code>background</code>, <code>surface</code>, <code>card</code>, <code>text_primary</code>, <code>outline</code>, <code>scrim</code>...). Se obtiene de <code>app.theme</code>.</span><span data-en>Exposes tokens derived from the accent and mode (<code>primary</code>, <code>background</code>, <code>surface</code>, <code>card</code>, <code>text_primary</code>, <code>outline</code>, <code>scrim</code> and so on). Access it via <code>app.theme</code>.</span></p>
+    <pre>manager = app.theme
+manager.set_dark_mode(<span class="k">True</span>)
+manager.toggle_dark_mode()          <span class="c"># alterna claro/oscuro</span>
+manager.set_accent(<span class="s">"teal"</span>)        <span class="c"># o set_custom_accent(Color)</span>
+app.add_listener(mi_callback)       <span class="c"># notifica cambios de tokens</span></pre>
+    <p data-es>Escucha los cambios del tema conectando oyentes a <code>add_listener</code>/<code>remove_listener</code>.</p>
+    <pre>manager.add_listener(<span class="k">lambda</span>: print(<span class="s">"tema actualizado"</span>))</pre>
+
+    <h2 id="disk">Tema desde fichero y hot-reload</h2>
+    <p><span data-es>Puedes persistir o consultar un tema guardado en JSON; el <b>hot-reload</b> recalcula al modificar el archivo sin reiniciar la app. El paquete incluye un <code>theme.json</code> de ejemplo que <code>load_bundled_resources()</code> aplica si existe.</span><span data-en>You can persist a theme as JSON; <b>hot-reload</b> recomputes when the file changes without a restart. The package ships a sample <code>theme.json</code> that <code>load_bundled_resources()</code> applies when present.</span></p>
+    <pre>manager.enable_hot_reload(<span class="s">"theme.json"</span>, check_interval=1.0)
+manager.save_theme_json(<span class="s">"theme.json"</span>)</pre>
+
+    <h2 id="i18n">Internacionalización (i18n)</h2>
+    <p><span data-es>Gestiona claves planas <code>"a.b.c"</code> con fusión en profundidad, notifica cambios de idioma y permite cargar carpetas de JSON (como las <code>locales/es.json</code> empaquetadas). Hay un módulo <code>t(...)</code> helper para acceder.</span><span data-en>Handles dot-keys like <code>"a.b.c"</code> with deep merge, notifies on language changes and can load directories of JSON files (like the bundled <code>locales/es.json</code>). A <code>t(...)</code> helper is provided.</span></p>
+    <pre><span class="k">from</span> pyphon.core.i18n import I18nManager, t
+m = app.i18n                     <span class="c"># ya creado por MobileApp</span>
+m.add_translations(<span class="s">"en"</span>, {<span class="s">"inicio.saludo"</span>: <span class="s">"Hi"</span>})
+m.set_language(<span class="s">"en"</span>)
+print(t(<span class="s">"inicio.saludo"</span>))     <span class="c"># "Hi"  — resuelve la clave</span>
+print(m.current_language)</pre>
+    <div class="note"><span data-es>El ejemplo <code>examples/quickstart.py</code> usa <code>load_bundled_resources()</code> para cargar <code>locales/es.json</code> y <code>locales/en.json</code> que viajan dentro del paquete.</span><span data-en>The bundled <code>examples/quickstart.py</code> demo uses <code>load_bundled_resources()</code> to load the <code>locales/es.json</code> and <code>locales/en.json</code> shipped in the package.</span></div>
+  </main>
+</div>
+<footer><div class="wrap">
+  <span data-es>PyPhonOS · Tema y color en tokens.</span><span data-en>PyPhonOS · theming and colour tokens.</span>
+  <span>v0.1.0</span>
+</div></footer>
+<script src="../assets/js/app.js"></script>
+</body>
+</html>
